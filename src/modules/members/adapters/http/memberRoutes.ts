@@ -17,5 +17,9 @@ export const createMemberRoutes = (service: MemberService): Router => {
     res.status(HTTP_STATUS.CREATED).json(await service.create(req.body));
   });
 
+  router.patch('/:id/deactivate', async (req, res) => {
+    res.status(HTTP_STATUS.OK).json(await service.deactivate(Number(req.params.id)));
+  });
+
   return router;
 };

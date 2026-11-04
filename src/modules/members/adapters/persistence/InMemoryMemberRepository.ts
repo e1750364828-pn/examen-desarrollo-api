@@ -20,5 +20,12 @@ export const createInMemoryMemberRepository = (initial: Member[] = []): MemberRe
     return copy(member);
   };
 
-  return { findAll, findById, save };
+  const deactivate = async (id: number): Promise<Member | undefined> => {
+    const member = members.find((item) => item.id === id);
+    if (!member) return undefined;
+    member.active = false;
+    return copy(member);
+  };
+
+  return { findAll, findById, save, deactivate };
 };

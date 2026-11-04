@@ -16,4 +16,10 @@ export class MemberService {
   };
 
   create = async (input: unknown): Promise<Member> => this.repository.save(parseNewMember(input));
+
+  deactivate = async (id: number): Promise<Member> => {
+    const member = await this.repository.deactivate(id);
+    if (!member) throw new NotFoundError(MEMBER_NOT_FOUND);
+    return member;
+  };
 }

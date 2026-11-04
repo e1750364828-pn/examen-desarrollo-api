@@ -41,4 +41,11 @@ describe('InMemoryMemberRepository', () => {
     expect(await repository.findById(99)).toBeUndefined();
     expect((await repository.save(jorge)).id).toBe(6);
   });
+
+  it('deactivates a member or returns undefined when it does not exist', async () => {
+    const repository = createInMemoryMemberRepository([{ id: 1, ...lucia }]);
+    expect(await repository.deactivate(1)).toEqual({ id: 1, ...lucia, active: false });
+    expect((await repository.findById(1))?.active).toBe(false);
+    expect(await repository.deactivate(99)).toBeUndefined();
+  });
 });

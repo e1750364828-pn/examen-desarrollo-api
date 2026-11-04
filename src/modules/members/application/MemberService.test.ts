@@ -51,4 +51,11 @@ describe('MemberService', () => {
     );
     expect(await service.list()).toHaveLength(1);
   });
+
+  it('deactivates a member and throws NotFoundError when it does not exist', async () => {
+    const service = buildService();
+    expect(await service.deactivate(1)).toEqual({ ...lucia, active: false });
+    expect((await service.getById(1)).active).toBe(false);
+    await expect(service.deactivate(99)).rejects.toThrow('Socio no encontrado');
+  });
 });

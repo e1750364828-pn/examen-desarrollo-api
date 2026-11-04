@@ -45,4 +45,18 @@ describe('Members HTTP routes', () => {
       expect(response.body).toEqual({ error: 'Socio no encontrado' });
     }
   });
+
+  it('PATCH /members/:id/deactivate responds 200 with the inactive member', async () => {
+    const app = createApp();
+    await request(app).post('/members').send(lucia);
+    const response = await request(app).patch('/members/1/deactivate');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ id: 1, ...lucia, active: false });
+  });
+
+  it('PATCH /members/:id/deactivate responds 404 when the member does not exist', async () => {
+    const response = await request(createApp()).patch('/members/999/deactivate');
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ error: 'Socio no encontrado' });
+  });
 });

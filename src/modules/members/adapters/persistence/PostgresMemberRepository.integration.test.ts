@@ -71,4 +71,11 @@ describe('PostgresMemberRepository (integration)', () => {
     expect(await repository.findById(Number.NaN)).toBeUndefined();
     expect(await repository.findById(99999999999)).toBeUndefined();
   });
+
+  it('deactivates a member and returns undefined when it does not exist', async () => {
+    const saved = await repository.save(lucia);
+    expect(await repository.deactivate(saved.id)).toEqual({ ...saved, active: false });
+    expect((await repository.findById(saved.id))?.active).toBe(false);
+    expect(await repository.deactivate(9999)).toBeUndefined();
+  });
 });

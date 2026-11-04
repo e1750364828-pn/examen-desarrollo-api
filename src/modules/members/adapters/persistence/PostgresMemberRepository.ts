@@ -45,5 +45,14 @@ export const createPostgresMemberRepository = (pool: Pool): MemberRepository => 
     return toMember(result.rows[0]);
   };
 
-  return { findAll, findById, save };
+  const deactivate = async (id: number): Promise<Member | undefined> => {
+    if (!isValidId(id)) return undefined;
+    const result = await pool.query<MemberRow>(
+      `UPDATE members SET active = FALSE WHERE id = $1 RETURNING ${COLUMNS}`,
+      [id],
+    );
+    return result.rows[0] ? toMember(result.rows[0]) : undefined;
+  };
+
+  return { findAll, findById, save, deactivate };
 };
